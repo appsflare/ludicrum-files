@@ -22,10 +22,10 @@ EXPOSE ${PORT}
 ##RUN apt-get install build-essential libavahi-compat-libdnssd-dev
 #install ffmpeg
 RUN apt-get update \
-    && apt-get install software-properties-common \
+    && apt-get --yes --force-yes install software-properties-common \
     && add-apt-repository ppa:kirillshkrogalev/ffmpeg-next \
     && apt-get update \
-    && apt-get install ffmpeg;
+    && apt-get --yes --force-yes install ffmpeg;
 
 ##Creating working directory
 RUN mkdir -p ${WORK_DIR} \
