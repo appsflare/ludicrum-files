@@ -1,8 +1,8 @@
 {
-  "name": "ludicrum-api",
+  "name": "ludicrum-files",
   "private": true,
-  "version": "0.0.0",
-  "description": "a Sails application",
+  "version": "1.0.0",
+  "description": "A ludicrum api microservice that provides file manipulation actions",
   "keywords": [],
   "dependencies": {
     "bcrypt": "^0.8.2",
