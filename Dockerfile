@@ -1,10 +1,18 @@
 FROM node:4.3.0
 MAINTAINER Srinath Janakiraman <me@vjsrinath.com>
 
-ENV VERSION=1.0.0
+ENV VERSION=1.0.1
 
 ENV WORK_DIR=/srv/www/ludicrum-files
+
 ENV PORT=4000
+ENV REDIS_HOST=redis
+ENV REDIS_PORT=6379
+ENV DB_HOST=orientdb
+ENV DB_PORT=2424
+ENV DB_NAME=ludicrum
+
+ENV THUMBNAIL_DIR=/srv/tmp/ludicrum-files/thumbnails/
 ## ENV NODE_ENV
 
 ## Expose port 4000
@@ -12,10 +20,15 @@ EXPOSE ${PORT}
 
 
 ##RUN apt-get install build-essential libavahi-compat-libdnssd-dev
-RUN apt-get update
+#install ffmpeg
+RUN add-apt-repository ppa:kirillshkrogalev/ffmpeg-next \
+    && apt-get update \
+    && apt-get install ffmpeg;
 
 ##Creating working directory
-RUN mkdir -p ${WORK_DIR};
+RUN mkdir -p ${WORK_DIR} \
+    && mkdir -p ${THUMBNAIL_DIR};
+
 ##Setting working directory
 WORKDIR ${WORK_DIR}
 

@@ -35,9 +35,9 @@ export default {
                      .exec(next);
                      });*/
 
-                    let dir = path.join(process.cwd(), '/tmp/thumnails/');
+                    let dir = path.join(process.cwd(), sails.config.thumbnails.dir);
 
-                    mkpath(dir, err = > next(err, dir)
+                    mkpath(dir, err => next(err, dir)
                     )
                     ;
 
@@ -48,23 +48,23 @@ export default {
                     GFS.createReadStream({
                             filename: fileName
                         },
-                        stream = > {
-                        var videoFilePath = path.join(dir, fileName);
-                    var writeStream = fs.createWriteStream(videoFilePath);
+                        stream => {
+                            var videoFilePath = path.join(dir, fileName);
+                            var writeStream = fs.createWriteStream(videoFilePath);
 
-                    // This pipes the POST data to the file
-                    stream.pipe(writeStream);
+                            // This pipes the POST data to the file
+                            stream.pipe(writeStream);
 
-                    writeStream.on('error', function (err) {
-                        next(err);
-                    });
+                            writeStream.on('error', function (err) {
+                                next(err);
+                            });
 
-                    stream.on('end', function (err) {
-                        next(err, videoFilePath);
-                    });
+                            stream.on('end', function (err) {
+                                next(err, videoFilePath);
+                            });
 
-                },
-                    next
+                        },
+                        next
                     )
                     ;
 
@@ -83,26 +83,25 @@ export default {
 
                         ffmpeg(videoFilePath)
                             .on('error', next)
-                            .on('end', (result, command) = > {
+                            .on('end', (result, command) => {
 
-                            GFS.saveFile({fd: thumbFileName}, thumbFilePath, uploadedFile = > {
-                            next(null, uploadedFile
-                    )
-                        ;
-                    },
-                        next
-                    )
-                        ;
+                                GFS.saveFile({fd: thumbFileName}, thumbFilePath, uploadedFile => {
+                                        next(null, uploadedFile
+                                        )
+                                        ;
+                                    },
+                                    next
+                                )
+                                ;
 
 
-                    })
-                    .
-                        screenshots({
-                            // Will take screens at 20%, 40%, 60% and 80% of the video
-                            count: 1,
-                            filename: thumbFileName,
-                            folder: thumbDirName
-                        });
+                            })
+                            .screenshots({
+                                // Will take screens at 20%, 40%, 60% and 80% of the video
+                                count: 1,
+                                filename: thumbFileName,
+                                folder: thumbDirName
+                            });
 
 
                     } catch (err) {
@@ -111,22 +110,21 @@ export default {
                 },
                 //does cleanup
                 function (thumnailFile, next) {
-                    [_tPath, _vPath].forEach(filePath = > {
+                    [_tPath, _vPath].forEach(filePath => {
                         try {
                             fs.unlink(filePath);
-                } catch
-                    (e)
-                    {
-                    }
-                })
+                        } catch
+                            (e) {
+                        }
+                    })
                     ;
 
                     Thumbnail.create({file: fileName, thumbnail: thumnailFile.filename})
                         .exec(next);
                 }],
-            (err, result) = > {
-            done(err, result);
-    })
+            (err, result) => {
+                done(err, result);
+            })
         ;
     }
 
