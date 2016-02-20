@@ -21,7 +21,8 @@ EXPOSE ${PORT}
 
 ##RUN apt-get install build-essential libavahi-compat-libdnssd-dev
 #install ffmpeg
-RUN add-apt-repository ppa:kirillshkrogalev/ffmpeg-next \
+RUN apt-get install software-properties-common \
+    && add-apt-repository ppa:kirillshkrogalev/ffmpeg-next \
     && apt-get update \
     && apt-get install ffmpeg;
 
