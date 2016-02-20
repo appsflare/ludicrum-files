@@ -23,11 +23,24 @@ EXPOSE ${PORT}
 #install ffmpeg
 RUN apt-get update
 
-RUN echo deb http://www.deb-multimedia.org testing main non-free >>/etc/apt/sources.list \
+RUN apt-get --yes --force-yes install wget
+
+
+RUN echo "deb http://www.deb-multimedia.org jessie main non-free" >>/etc/apt/sources.list \
+    && echo "deb-src http://www.deb-multimedia.org jessie main non-free" >>/etc/apt/sources.list \
     && apt-get update \
     && apt-get --yes --force-yes install deb-multimedia-keyring \
     && apt-get update \
-    && apt-get --yes --force-yes install ffmpeg
+    && apt-get remove ffmpeg \
+    && apt-get --yes --force-yes install build-essential libmp3lame-dev libvorbis-dev libtheora-dev libspeex-dev yasm pkg-config libfaac-dev libopenjpeg-dev libx264-dev;
+
+RUN wget http://ffmpeg.org/releases/ffmpeg-3.0.tar.bz2 \
+    && tar xvjf ffmpeg-3.0.tar.bz2 \
+    && cd ffmpeg-3.0 \
+    && ./configure --enable-gpl --enable-postproc --enable-swscale --enable-avfilter --enable-libmp3lame --enable-libvorbis --enable-libtheora --enable-libx264 --enable-libspeex --enable-shared --enable-pthreads --enable-libopenjpeg --enable-libfaac --enable-nonfree \
+    && make \
+    && make install;
+
 
 ##Creating working directory
 RUN mkdir -p ${WORK_DIR} \
