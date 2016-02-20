@@ -21,11 +21,13 @@ EXPOSE ${PORT}
 
 ##RUN apt-get install build-essential libavahi-compat-libdnssd-dev
 #install ffmpeg
-RUN apt-get update \
-    && apt-get --yes --force-yes install software-properties-common \
-    && add-apt-repository ppa:kirillshkrogalev/ffmpeg-next \
+RUN apt-get update
+
+RUN echo deb http://www.deb-multimedia.org testing main non-free >>/etc/apt/sources.list \
     && apt-get update \
-    && apt-get --yes --force-yes install ffmpeg;
+    && apt-get --yes --force-yes install deb-multimedia-keyring \
+    && apt-get update \
+    && apt-get --yes --force-yes install ffmpeg
 
 ##Creating working directory
 RUN mkdir -p ${WORK_DIR} \
